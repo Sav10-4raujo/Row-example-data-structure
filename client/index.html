@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Simulador de fila</title>
+  <script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <style>
+    body{
+      background-color: rgb(143, 174, 231);
+    }
+    #main{
+      margin: 0, auto;
+      text-align: center;
+    }
+    #addItem{
+      margin: auto;
+      width: 300px;
+      text-align: center;
+      border: .5px black solid;
+    }
+    #description{
+      margin: 100px auto auto auto;
+      text-align: center;
+    }
+    #btns{
+      margin: 20px auto auto auto;
+      width: 300px;
+      text-align: center;
+    }
+    #remove, #insert{
+      border: .5px black solid;
+    }
+    #list{
+      margin: 20px auto auto auto;
+      width: 300px;
+    }
+
+  </style>
+
+
+</head>
+<body>
+    <div id="main">
+      <h1>Simulador de fila</h1>      
+    </div>
+    <form>
+        <div id="description">Adicione um item a lista</div>
+        <input type="text" class="form-control" id="addItem" placeholder="">
+        <div id="btns">
+            <button onclick="put()" type="button" class="btn btn-primary" id="insert">Inserir</button>
+            <button onclick="remove()" type="button" class="btn btn-danger"id="remove">Remover</button>
+        </div>
+    </form>
+    <div id="list">
+
+    </div>
+
+    <script>
+        function put() {
+          $.ajax({
+            url: "http://localhost:3333/insert",
+            type: "post",
+            data:{
+              item: $("#addItem").val()
+            }
+          })
+          .done(function(result){
+            $("#list").html("")
+            $("#addItem").val("")
+            result.forEach(function(item){
+              $("#list").append(`<div style="width:50px; margin:5px; text-align: center; float:left; background:#2a7aa1; border-radius: 30;">${item}</div>`)
+            })
+          })
+          .fail(function(a,b,result){
+            console.log(result)
+          })
+        }
+        function remove() {
+          $.ajax({
+            url: "http://localhost:3333/remove",
+            type: "post"
+          })
+          .done(function(result){
+            $("#list").html("")
+            result.forEach(function(item){
+              $("#list").append(`<div style="width:50px; margin:5px; text-align: center; float:left; background:#2a7aa1; border-radius: 30;">${item}</div>`)
+            })
+          })
+          .fail(function(a,b,result){
+            console.log(result)
+          })
+        }
+      </script>
+</body>
+</html>
